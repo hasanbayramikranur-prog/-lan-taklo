@@ -1,1 +1,28 @@
-# -lan-taklo
+import os
+import urllib.parse
+import urllib.request
+
+TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+
+def telegram(method, data):
+    url = f"https://api.telegram.org/bot{TOKEN}/{method}"
+    encoded = urllib.parse.urlencode(data).encode()
+    with urllib.request.urlopen(url, data=encoded) as response:
+        return response.read().decode()
+
+updates = telegram("getUpdates", {})
+
+import json
+data = json.loads(updates)
+
+for update in data.get("result", []):
+    message = update.get("message")
+    if message:
+        chat_id = message["chat"]["id"]
+        telegram(
+            "sendMessage",
+            {
+                "chat_id": chat_id,
+                "text": "✅ İlan takip botu çalışıyor!"
+            }
+        )
