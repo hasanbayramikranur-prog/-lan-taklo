@@ -1,13 +1,19 @@
+
 name: İlan Takip
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Kodu indir
+        uses: actions/checkout@v4
 
       - name: Python çalıştır
         env:
